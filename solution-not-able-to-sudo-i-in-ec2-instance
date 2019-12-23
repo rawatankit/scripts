@@ -1,0 +1,29 @@
+Issue :                sudo: /usr/bin/sudo must be owned by uid 0 and have the setuid bit set
+
+Step 1: stop the instance
+Step 2 : got to actions--> instance settings-->view/change user data
+Step 3: paste below line and save and restart server
+
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+#!/bin/bash
+/bin/chown -R root:root /usr
+/bin/chmod u+s /usr/bin/sudo
+/bin/chmod 644 /usr/lib/sudo/sudoers.so
+--//
+
+Step 4: after error remove you can again stop instance and remove paste script
+
